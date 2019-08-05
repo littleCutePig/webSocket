@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+        }
+        html,body,.wrapper{
+            width: 100%;
+            height: 100%;
+        }
+        .wrapper{
+            display: flex;
+            flex-direction: column;
+        }
+        .content{
+            width: 100%;
+            flex: 1;
+        }
+        .footer{
+            width: 100%;
+            height: 70px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 15px;
+        }
+        .footer>input{
+            flex: 1;
+            height: 100%;
+            border: 1px solid #ccc;
+        }
+        .footer>button{
+            width: 60px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        ul{
+            width: 100%;
+            padding: 0 15px;
+        }
+        li{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <ul class="content" id="ul">
+
+        </ul>
+        <div class="footer"><input type="text" id="input"><button type="button" id="btn">发送</button></div>
+    </div>
+    <script>
+        btn.onclick = function(){
+            ws.send(input.value);
+            let li = document.createElement('li');
+            li.innerHTML = input.value;
+            li.style.textAlign = "right";
+            ul.appendChild(li)
+        }
+        const ws = new WebSocket('ws://localhost:3000');
+        ws.onmessage = function(msg){
+            let message = JSON.parse(msg.data);
+            
+
+            if(message.type === 'msg'){
+                console.log(message.data)
+            }
+            if(message.type === 'chat'){
+                let li = document.createElement('li');
+                li.innerHTML = message.data;
+                ul.appendChild(li)
+            }
+
+            if(message.type === 'num'){
+                console.log(message.data)
+            }
+        }
+    </script>
+</body>
+</html>
